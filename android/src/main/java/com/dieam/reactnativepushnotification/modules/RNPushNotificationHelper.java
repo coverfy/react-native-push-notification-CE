@@ -36,7 +36,7 @@ public class RNPushNotificationHelper {
     public static final String PREFERENCES_KEY = "rn_push_notification";
     private static final long DEFAULT_VIBRATION = 300L;
     private static final String NOTIFICATION_CHANNEL_ID = "rn-push-notification-channel-id";
-    
+
     private Context context;
     private final SharedPreferences scheduledNotificationsPersistence;
     private static final int ONE_MINUTE = 60 * 1000;
@@ -138,7 +138,9 @@ public class RNPushNotificationHelper {
                 return;
             }
 
-            if (bundle.getString("message") == null) {
+            if (bundle.getString("message") == null && bundle.getString("mp_message") != null) {
+                bundle.putString("message", bundle.getString("mp_message"));
+            } else if (bundle.getString("message") == null) {
                 // this happens when a 'data' notification is received - we do not synthesize a local notification in this case
                 Log.d(LOG_TAG, "Cannot send to notification centre because there is no 'message' field in: " + bundle);
                 return;
